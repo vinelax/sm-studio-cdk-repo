@@ -1,0 +1,13 @@
+{
+  "app": "python app.py",
+  "context": {
+    "GitHubRepoOwner": "vinelax",
+    "GitHubRepoName": "sm-studio-cdk-repo",
+    "GitHubBranch": "main",
+
+    "StudioExecutionRoleArn": "",
+    "CreateStudioExecutionRole": "true",
+    "StudioExecRoleNamePrefix": "SageMakerExecRole",
+    "StudioVpcOnly": "true"
+  }
+}
