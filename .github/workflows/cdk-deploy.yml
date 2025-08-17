@@ -1,4 +1,4 @@
-name: CDK Deploy
+name: CDK Deploy SageMaker AI Studio
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {} # allow manual runs
 
 permissions:
-  id-token: write   # OIDC
+  id-token: write 
   contents: read
 
 env:
@@ -52,9 +52,9 @@ jobs:
           echo "CDK_DEFAULT_REGION=${{ env.AWS_REGION }}" >> $GITHUB_ENV
 
       - run: cdk context --clear
-      - run: cdk synth
-      - run: cdk diff
+      - run: cdk synth "$STACKS"
+      - run: cdk diff "$STACKS"
 
       - name: CDK Deploy (no approval prompts)
         if: github.event_name == 'push'
-        run: cdk deploy --require-approval never
+        run: cdk deploy "$STACKS" --require-approval never

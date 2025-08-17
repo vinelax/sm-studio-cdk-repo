@@ -17,6 +17,6 @@ env = Environment(
 SageMakerStudioPublicStack(app, "SageMakerStudioPublicStack", env=env)
 
 # One-time: creates GitHub OIDC role in AWS account.
-OidcRoleStack(app, "OidcRoleStack")
+# OidcRoleStack(app, "OidcRoleStack", env=env)
 
 app.synth()
