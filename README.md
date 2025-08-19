@@ -11,7 +11,7 @@ This repo is wired so pushes to `main` can **deploy CDK** to AWS using **GitHub 
 - `requirements.txt` – Python deps.
 
 ## One‑time setup
-1) **Install prerequisites** (AWS CLI, Node.js LTS, Python 3.9+, CDK v2).  
+1) **Install prerequisites** (AWS CLI, Node.js LTS, Python 3.11, CDK v2).  
 2) **Authenticate** with AWS (access keys):  
    ```bash
    aws sts get-caller-identity
@@ -55,7 +55,6 @@ cdk deploy
 ```
 
 ## Teardown
-Be careful—this deletes resources:
 ```bash
 cdk destroy SmCdkAppStack
 # To remove the OIDC role:

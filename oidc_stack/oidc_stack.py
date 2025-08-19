@@ -15,17 +15,18 @@ class OidcRoleStack(Stack):
         repo = self.node.try_get_context("GitHubRepoName")
         branch = self.node.try_get_context("GitHubBranch") or "main"
 
-        # Create the execution role 
+        # Create the execution role
+        studio_exec_role_arn   = self.node.try_get_context("StudioExecutionRoleArn") or ""  
         create_exec_role = str(self.node.try_get_context("CreateStudioExecutionRole") or "false").lower() == "true"
         exec_role_name_prefix = self.node.try_get_context("StudioExecRoleNamePrefix") or "SageMakerExecRole"
+        wf_file = self.node.try_get_context("GitHubWorkflowFile") or "cdk-deploy.yml"
 
         if not owner or not repo:
             raise ValueError("Set GitHubRepoOwner and GitHubRepoName in cdk.json context.")
 
         # ---- GitHub OIDC provider -------------------------------------------
         provider = iam.OpenIdConnectProvider(
-            self,
-            "GitHubProvider",
+            self, "GitHubProvider",
             url="https://token.actions.githubusercontent.com",
             client_ids=["sts.amazonaws.com"],
         )
@@ -35,7 +36,9 @@ class OidcRoleStack(Stack):
             provider.open_id_connect_provider_arn,
             conditions={
                 "StringLike": {
-                    "token.actions.githubusercontent.com:sub": f"repo:{owner}/{repo}:ref:refs/heads/{branch}"
+                    "token.actions.githubusercontent.com:sub": f"repo:{owner}/{repo}:ref:refs/heads/{branch}",
+                    "token.actions.githubusercontent.com:job_workflow_ref":
+                    f"{owner}/{repo}/.github/workflows/{wf_file}@refs/heads/{branch}",
                 },
                 "StringEquals": {
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"

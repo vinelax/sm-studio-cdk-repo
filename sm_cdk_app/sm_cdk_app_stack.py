@@ -33,7 +33,7 @@ class SageMakerStudioPublicStack(Stack):
                 assumed_by=iam.ServicePrincipal("sagemaker.amazonaws.com"),
                 description="Execution role for SageMaker Studio (PublicInternetOnly)",
             )
-            # Starting broad for dev
+            # Starting broad for dev (can create least-privilege policy later)
             exec_role.add_managed_policy(
                 iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSageMakerFullAccess")
             )

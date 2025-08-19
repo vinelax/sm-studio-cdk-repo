@@ -41,7 +41,7 @@ jobs:
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::796973481044:role/OidcRoleStack-GitHubActionsRole4F1BBA26-M995LX6t2E16
+          role-to-assume: arn:aws:iam::796973481044:role/OidcRoleStack-GitHubActionsRole4F1BBA26-xSkhshsn8D8s
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Export CDK env

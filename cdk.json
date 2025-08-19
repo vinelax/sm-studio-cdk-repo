@@ -8,6 +8,7 @@
     "StudioExecutionRoleArn": "",
     "CreateStudioExecutionRole": "true",
     "StudioExecRoleNamePrefix": "SageMakerExecRole",
-    "StudioVpcOnly": "true"
+    "StudioVpcOnly": "false",
+    "GitHubWorkflowFile": "cdk-deploy.yml"
   }
 }
