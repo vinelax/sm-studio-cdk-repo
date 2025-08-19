@@ -1,5 +1,6 @@
 from aws_cdk import (
     Stack,
+    Aws,
     aws_ec2 as ec2,
     aws_iam as iam,
     aws_sagemaker as sagemaker,
