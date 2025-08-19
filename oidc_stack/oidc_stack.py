@@ -37,8 +37,6 @@ class OidcRoleStack(Stack):
             conditions={
                 "StringLike": {
                     "token.actions.githubusercontent.com:sub": f"repo:{owner}/{repo}:ref:refs/heads/{branch}",
-                    "token.actions.githubusercontent.com:job_workflow_ref":
-                    f"{owner}/{repo}/.github/workflows/{wf_file}@refs/heads/{branch}",
                 },
                 "StringEquals": {
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
