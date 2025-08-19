@@ -1,6 +1,5 @@
 from aws_cdk import (
     Stack,
-    Aws,
     aws_ec2 as ec2,
     aws_iam as iam,
     aws_sagemaker as sagemaker,
@@ -65,11 +64,5 @@ class SageMakerStudioPublicStack(Stack):
         CfnOutput(self, "SubnetIds", value=",".join(subnet_ids))
         CfnOutput(self, "StudioDomainId", value=domain.attr_domain_id)
         CfnOutput(self, "StudioUserName", value=user.user_profile_name)
-        CfnOutput(
-            self,
-            "StudioConsoleUrl",
-            value=f"https://{Aws.REGION}.console.aws.amazon.com/sagemaker/home?region={Aws.REGION}"
-                  f"#/studio/domains/{domain.attr_domain_id}/user-profiles/{user.user_profile_name}"
-        )
 
   
