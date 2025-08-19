@@ -15,15 +15,9 @@ class OidcRoleStack(Stack):
         repo = self.node.try_get_context("GitHubRepoName")
         branch = self.node.try_get_context("GitHubBranch") or "main"
 
-         # Reuse an existing Studio execution role (recommended)
-        studio_exec_role_arn = self.node.try_get_context("StudioExecutionRoleArn") or ""
-
-        # If you want CI to CREATE the execution role instead of reusing one
+        # Create the execution role 
         create_exec_role = str(self.node.try_get_context("CreateStudioExecutionRole") or "false").lower() == "true"
         exec_role_name_prefix = self.node.try_get_context("StudioExecRoleNamePrefix") or "SageMakerExecRole"
-
-        # If you'll deploy Studio with VpcOnly + create VPC endpoints in CDK
-        studio_vpc_only = str(self.node.try_get_context("StudioVpcOnly") or "false").lower() == "true"
 
         if not owner or not repo:
             raise ValueError("Set GitHubRepoOwner and GitHubRepoName in cdk.json context.")
@@ -130,7 +124,7 @@ class OidcRoleStack(Stack):
                 conditions={"StringEquals": {"iam:PassedToService": "sagemaker.amazonaws.com"}},
             ))
 
-        # 7) Optionally allow CI to CREATE the execution role (scoped by prefix)
+        # 7) Allow CI to CREATE the execution role (scoped by prefix)
         if create_exec_role:
             statements.append(iam.PolicyStatement(
                 sid="IamForStudioExecutionRole",
@@ -144,19 +138,7 @@ class OidcRoleStack(Stack):
                 resources=[f"arn:aws:iam::{Aws.ACCOUNT_ID}:role/{exec_role_name_prefix}*"],
             ))
 
-        # 8) If you'll deploy Studio as VpcOnly and create VPC endpoints
-        if studio_vpc_only:
-            statements.append(iam.PolicyStatement(
-                sid="VpcEndpointsForStudio",
-                effect=iam.Effect.ALLOW,
-                actions=[
-                    "ec2:CreateVpcEndpoint", "ec2:ModifyVpcEndpoint", "ec2:DeleteVpcEndpoints",
-                    "ec2:DescribeVpcEndpoints", "ec2:DescribeVpcEndpointServices",
-                ],
-                resources=["*"],
-            ))
-
-        # 9) Allow assuming the modern CDK bootstrap roles (no AdminAccess)
+        # 9) Allow assuming the modern CDK bootstrap roles
         bootstrap_role_arns = [
             f"arn:aws:iam::{Aws.ACCOUNT_ID}:role/cdk-hnb659fds-deploy-role-{Aws.ACCOUNT_ID}-{Aws.REGION}",
             f"arn:aws:iam::{Aws.ACCOUNT_ID}:role/cdk-hnb659fds-file-publishing-role-{Aws.ACCOUNT_ID}-{Aws.REGION}",
